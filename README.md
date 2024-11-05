@@ -51,6 +51,14 @@ kubectl apply -f manifests/csr.yaml
 kubectl certificate approve demo
 ```
 
+- Sign cert
+```
+openssl x509 -req -in demo.csr -days 365 -CA ca.crt -CAkey ca.key -CAcreateserial -out demo.crt
+kubectl get csr demo -o json | \ 
+jq '.status.certificate = "'$(base64 demo.crt | tr -d '\n')'"' | \
+kubectl replace --raw /apis/certificates.k8s.io/v1/certificatesigningrequests/demo/status -f -
+```
+
 - Get approved cert
 ```
 kubectl get csr demo -o jsonpath='{.status.certificate}' | openssl base64 -d -A -out demo.pem
