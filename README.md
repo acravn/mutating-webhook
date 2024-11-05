@@ -21,27 +21,23 @@ kubectl create deployment hello-server --image=localhost:5001/hello-app:1.0
 ## Verify deployment comes up
 kubectl delete deployment hello-server
 
-1. Create cluster:
-```
-kind create cluster --config kind.yaml
-kubectl cluster-info --context kind-kind
-
-## install cert manager:
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.1/cert-manager.yaml
 ```
 
 2. Create webhook TLS artifacts
+
 ```
 ./ssl/gen_tls.sh
 ```
 
 3. Update mutating webhook manifest
+
 ```
 ## Copy this output and paste into manifest CaBundle section
 cat ca.crt | base64 | tr -d '\n'
 ```
 
 4. Apply mutating webhook
+
 ```
 kubectl apply -f manifests/mutatig-webhook.yaml
 

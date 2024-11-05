@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/tls"
 	"fmt"
 	"html"
 	"io"
@@ -53,7 +52,6 @@ func main() {
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 1048576
-		TLSConfig:       &tls.Config{InsecureSkipVerify: true},
 	}
 
 	log.Fatal(s.ListenAndServeTLS("./ssl/demo.crt", "./ssl/demo.key"))
