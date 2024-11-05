@@ -1,23 +1,30 @@
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: mutateme
+  name: demo
   labels:
-  app: mutateme
+    app: demo
 webhooks:
-  - name: mutateme.default.svc.cluster.local
+  - name: demo.default.svc.cluster.local
+    admissionReviewVersions:
+      - v1
     clientConfig:
-    caBundle: ${CA_BUNDLE}
-    service:
-    name: mutateme
-    namespace: default
-    path: "/mutate"
- rules:
-  - operations: ["CREATE"]
-    apiGroups: [""]
-    apiVersions: ["v1"]
-    resources: ["pods"]
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJZUhqWWZhRnhpZ2N3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRFeE1ETXlNak0yTWpWYUZ3MHpOREV4TURFeU1qUXhNalZhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUN3Nm9PdlptcTRVbStOV0x2c1BzMGV5Q2RVVVBxNGphWkhuWmo0dmxKOEoxWXhFam4yUHpoREFNcm0Kam50UzZLU2kvSmdiemRqeWV5eVlESFQ5NnBCYk9mZzVlcGNFRnpFZzhGRThFZnJwZ0NYNUZLWXArWTY0bDdybgpYclM4OUJDb1poSklnMVFYbk1pT1lQNDVEUy85SU5NR3JrUExFWjBqRHR3a1krQWk0dVZMc3ZlSjhqeHpwQkp2CnZoV3orODJicE1uVWt3UVRuZUJoeFUzUHlKNmFnTUNVRE5wYnEvVXl6ZEhqRHQwem9pVXZrYVVhMUhTNUNXVjQKaHhiN1ZKNWJSTUl6dTlEbk9nR21Ta0UzZEZhNDk1YnYweVBsUzkxQ3NraCtwV213QkVQaUxOejlMNkRlQkZzTwpGZGtSYzFGQ3NZR3VDRzkxTkdlMUhpaThyUXF6QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJTRVliRVdHZm5yRkh2WG44c1pTL0lleFk2bGl6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ1NDUXJabGhWbApRTVVLSUloSHZTYVRRTmNIVGVZT0ZEdlg5MHN3cHhJZXJ4a2pjZkp1NUx2S1pGZHJuZHJndUN2bE5kRFl0cUVzCjRKUktuaW9tVldIUk5tb2xBU041K3AvRE9YMWRuM2JmUGhLbEt0c3BRQ2lUZUZrN2dyOFdtNEdqRUZRWlFJRXQKZmVueTRmVVFFbSs5K3dZM1B4M0JnWVdHbVlZOXNkaGFQeGVjazZLR1hodDdXcWNvakJHbE1nZGZVbXZiMis0OQpINk9QRi9WVSttQWd3UmxCcDhJWE5pWFNMSEtmQk5iSjRCb1RyU0NOMHZIcFZBaGVGS1RHemYwQ0NkSDdMSlVtCkdjbHZobHBDalA5RFdRemJyekJLRkJTbUNhSzJkU1dLWGtJYzhzYTVtWkxxdFBHOEFPT2xMZnRCaUJoU05DcG4KVmtyL3JnTWxzU0xuCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      service:
+        name: demo
+        namespace: default
+        path: "/mutate"
+        port: 443
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    sideEffects: None
+    timeoutSeconds: 5
+    reinvocationPolicy: Never
+    failurePolicy: Ignore
     namespaceSelector:
-    matchLabels:
-    mutateme: enabled
+      matchLabels:
+        mutateme: enabled
