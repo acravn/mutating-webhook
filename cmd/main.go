@@ -1,14 +1,15 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"html"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"time"
 
-	m "github.com/acravn/mutate-webhook/pkg/mutate"
+	m "github.com/acravn/mutating-webhook/pkg/mutate"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +19,7 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 func handleMutate(w http.ResponseWriter, r *http.Request) {
 
 	// read the body / request
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
 		log.Println(err)
@@ -27,7 +28,7 @@ func handleMutate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// mutate the request
-	mutated, err := m.Mutate(body)
+	mutated, err := m.Mutate(body, true)
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -52,8 +53,9 @@ func main() {
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 1048576
+		TLSConfig:       &tls.Config{InsecureSkipVerify: true},
 	}
 
-	log.Fatal(s.ListenAndServeTLS("./ssl/mutateme.pem", "./ssl/mutateme.key"))
+	log.Fatal(s.ListenAndServeTLS("./ssl/demo.crt", "./ssl/demo.key"))
 
 }

@@ -10,11 +10,9 @@ kubeadmConfigPatches:
   apiServer:
     extraArgs:
       "enable-admission-plugins": "NamespaceLifecycle,LimitRanger,ServiceAccount,TaintNodesByCondition,Priority,DefaultTolerationSeconds,DefaultStorageClass,PersistentVolumeClaimResize,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
-  controllerManager:
-    extraArgs:
-      - name: "cluster-signing-key-file"
-        value: "/etc/kubernetes/pki/ca.key"
-      - name: "cluster-signing-cert-file"
-        value: "/etc/kubernetes/pki/ca.crt"
+containerdConfigPatches:
+- |-
+  [plugins."io.containerd.grpc.v1.cri".registry]
+    config_path = "/etc/containerd/certs.d"
 nodes:
 - role: control-plane

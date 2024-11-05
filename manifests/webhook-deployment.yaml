@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - image: localhost:5001/demo:1.0.0
+        name: demo
+        imagePullPolicy: Always
+        resources: {}
+        ports:
+          - containerPort: 8443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo
+  name: demo
+  namespace: default
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 8443
+  selector:
+    app: demo
+  type: ClusterIP

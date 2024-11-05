@@ -51,14 +51,22 @@ func Mutate(body []byte, verbose bool) ([]byte, error) {
 		// the actual mutation is done by a string in JSONPatch style, i.e. we don't _actually_ modify the object, but
 		// tell K8S how it should modifiy it
 		p := []map[string]string{}
-		for i := range pod.Spec.Containers {
-			patch := map[string]string{
-				"op":    "replace",
-				"path":  fmt.Sprintf("/spec/containers/%d/image", i),
-				"value": "debian",
-			}
-			p = append(p, patch)
+		
+		patch := map[string]string{
+			"op": "replace",
+			"path": fmt.Sprintf("/metadata/labels/mutated"),
+			"value": "yes",
 		}
+		p = append(p, patch)
+
+		// for i := range pod.Spec.Containers {
+		// 	patch := map[string]string{
+		// 		"op":    "replace",
+		// 		"path":  fmt.Sprintf("/spec/containers/%d/image", i),
+		// 		"value": "debian",
+		// 	}
+		// 	p = append(p, patch)
+		// }
 		// parse the []map into JSON
 		resp.Patch, err = json.Marshal(p)
 
